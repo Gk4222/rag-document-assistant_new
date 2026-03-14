@@ -1,11 +1,13 @@
 import streamlit as st
-from rag import retriever, bm25, llm, texts
-st.write("App started successfully")
+
 st.title("📄 RAG Document Assistant")
+st.write("Ask questions about the uploaded document.")
 
-query = st.text_input("Ask a question about the document")
+query = st.text_input("Ask a question")
 
+# Only load heavy RAG code when a question is asked
 if query:
+    from rag import retriever, bm25, llm, texts
 
     docs = retriever.invoke(query)
 
