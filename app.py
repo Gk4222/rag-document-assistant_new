@@ -1,4 +1,8 @@
 import streamlit as st
+
+st.title("📄 RAG Document Assistant")
+st.write("Ask questions about the uploaded document.")
+
 @st.cache_resource
 def load_rag():
     from rag import retriever, bm25, llm, texts
@@ -6,14 +10,10 @@ def load_rag():
 
 retriever, bm25, llm, texts = load_rag()
 
-st.title("📄 RAG Document Assistant")
-st.write("Ask questions about the uploaded document.")
-
 query = st.text_input("Ask a question")
 
 if query:
     with st.spinner("Searching document and generating answer..."):
-        from rag import retriever, bm25, llm, texts
 
         docs = retriever.invoke(query)
 
