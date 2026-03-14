@@ -1,39 +1,20 @@
 import streamlit as st
+import os
+from langchain_groq import ChatGroq
 
-st.title("📄 RAG Document Assistant")
-st.write("Ask questions about the uploaded document.")
+st.title("Groq Test")
 
-@st.cache_resource
-def load_rag():
-    from rag import retriever, bm25, llm, texts
-    return retriever, bm25, llm, texts
+groq_key = os.getenv("GROQ_API_KEY") or st.secrets["GROQ_API_KEY"]
 
-retriever, bm25, llm, texts = load_rag()
+llm = ChatGroq(
+    model="llama-3.1-8b-instant",
+    groq_api_key=groq_key
+)
 
-query = st.text_input("Ask a question")
+query = st.text_input("Ask something")
 
 if query:
-    with st.spinner("Searching document and generating answer..."):
+    with st.spinner("Generating..."):
+        response = llm.invoke(query)
 
-        docs = retriever.invoke(query)
-
-        query_tokens = query.split()
-        bm25_results = bm25.get_top_n(query_tokens, texts, n=3)
-
-        context_docs = docs + bm25_results
-        context = "\n\n".join([doc.page_content for doc in context_docs])
-
-        prompt = f"""
-        Answer the question using the context below.
-
-        Context:
-        {context}
-
-        Question:
-        {query}
-        """
-
-        response = llm.invoke(prompt)
-
-    st.subheader("Answer")
     st.write(response.content)
