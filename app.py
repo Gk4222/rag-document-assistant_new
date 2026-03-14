@@ -1,9 +1,9 @@
 import streamlit as st
 from rag import retriever, bm25, llm, texts
+st.write("App started successfully")
+st.title("📄 RAG Document Assistant")
 
-st.title("RAG Document Assistant")
-
-query = st.text_input("Ask a question")
+query = st.text_input("Ask a question about the document")
 
 if query:
 
@@ -13,7 +13,6 @@ if query:
     bm25_results = bm25.get_top_n(query_tokens, texts, n=3)
 
     context_docs = docs + bm25_results
-
     context = "\n\n".join([doc.page_content for doc in context_docs])
 
     prompt = f"""
