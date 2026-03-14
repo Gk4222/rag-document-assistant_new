@@ -5,8 +5,9 @@ from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from rank_bm25 import BM25Okapi
 import os
+import streamlit as st
 
-groq_key = os.getenv("GROQ_API_KEY")
+groq_key=os.getenv("GROQ_API_KEY") or st.secrets["GROQ_API_KEY"]
 # -----------------------------
 # 1️⃣ Load PDF
 # -----------------------------
