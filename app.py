@@ -1,4 +1,10 @@
 import streamlit as st
+@st.cache_resource
+def load_rag():
+    from rag import retriever, bm25, llm, texts
+    return retriever, bm25, llm, texts
+
+retriever, bm25, llm, texts = load_rag()
 
 st.title("📄 RAG Document Assistant")
 st.write("Ask questions about the uploaded document.")
