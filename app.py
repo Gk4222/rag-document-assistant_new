@@ -5,29 +5,29 @@ st.write("Ask questions about the uploaded document.")
 
 query = st.text_input("Ask a question")
 
-# Only load heavy RAG code when a question is asked
 if query:
-    from rag import retriever, bm25, llm, texts
+    with st.spinner("Searching document and generating answer..."):
+        from rag import retriever, bm25, llm, texts
 
-    docs = retriever.invoke(query)
+        docs = retriever.invoke(query)
 
-    query_tokens = query.split()
-    bm25_results = bm25.get_top_n(query_tokens, texts, n=3)
+        query_tokens = query.split()
+        bm25_results = bm25.get_top_n(query_tokens, texts, n=3)
 
-    context_docs = docs + bm25_results
-    context = "\n\n".join([doc.page_content for doc in context_docs])
+        context_docs = docs + bm25_results
+        context = "\n\n".join([doc.page_content for doc in context_docs])
 
-    prompt = f"""
-    Answer the question using the context below.
+        prompt = f"""
+        Answer the question using the context below.
 
-    Context:
-    {context}
+        Context:
+        {context}
 
-    Question:
-    {query}
-    """
+        Question:
+        {query}
+        """
 
-    response = llm.invoke(prompt)
+        response = llm.invoke(prompt)
 
     st.subheader("Answer")
     st.write(response.content)
